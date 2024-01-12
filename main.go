@@ -35,6 +35,10 @@ var user2  = helper.Data{
 }
 
 func main() {
+
   // Add some data -> helper.AddNote(&user1)
   // Add some data -> helper.AddNote(&user2)
+
+  // Find the data by "user_email"
+  helper.FindBook("john@mail.com")
 }

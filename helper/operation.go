@@ -46,3 +46,40 @@ func AddNote(data *Data) {
   
 
 }
+
+func FindBook(email string) {
+  result, err := config.Dyno.GetItem(&dynamodb.GetItemInput{
+    // Define table name
+    TableName: aws.String("books"),
+    Key: map[string]*dynamodb.AttributeValue{
+      "user_email": {
+        S: aws.String(email),
+      },
+    },
+  })
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  if result.Item == nil {
+    log.Fatal("Data is Not found")
+  }
+
+  var data Data
+  // Decode raw data into struct object
+  err = dynamodbattribute.UnmarshalMap(result.Item, &data) 
+
+  if err != nil {
+    log.Fatal(err)
+  } 
+
+  // Because property of "Book" data is in array 
+  // We need to loop over it to get the data
+
+  for index, hasil := range data.Book {
+    fmt.Printf("Data #%v \n", index)
+    fmt.Println("Title:", hasil.Title)
+    fmt.Println("Author:", hasil.Author)
+  }
+}
